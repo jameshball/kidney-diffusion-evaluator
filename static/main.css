@@ -1,0 +1,186 @@
+html, body {
+    height: 100vh;
+    background-color: #282828;
+    font-family: 'Fira Code', monospace;
+}
+
+.bg-dark {
+    background-color: black !important;
+}
+
+.samples {
+    padding-top: 80px;
+}
+
+.navbar-brand {
+    position: absolute;
+    color: #00FF00 !important;
+}
+
+.add-icon, .play-icon {
+    float: right;
+    margin-left: 10px;
+    margin-right: -5px;
+}
+
+.download-icon {
+    float: right;
+    margin-left: -5px;
+    margin-right: -5px;
+}
+
+.stop-icon {
+    float: right;
+    margin: 0 -5px;
+}
+
+.sample-buttons {
+    margin-left: 20px;
+    float: right;
+}
+
+.delete-button {
+    position: relative;
+    top: 8px;
+    right: 10px;
+}
+
+.delete-button:hover {
+    text-decoration: none;
+}
+
+.card-header {
+    font-size: 20px;
+}
+
+#description {
+    min-height: 100px;
+}
+
+.red-button {
+    color: white;
+    transition: color .15s ease-in-out;
+}
+
+.red-button:hover {
+    color: #FF0000;
+}
+
+.custom-checkbox .custom-control-input:checked ~ .custom-control-label::before {
+    background-color: #00FF00;
+}
+
+.custom-checkbox .custom-control-indicator {
+    border-radius: .1rem;
+}
+
+.custom-file {
+    margin-bottom: 10px;
+}
+
+.custom-file-label {
+    margin: 0 15px;
+}
+
+.sample-card {
+    margin-bottom: 20px;
+    transition: all .15s ease-in-out;
+}
+
+.custom-file-input:lang(en) ~ .custom-file-label::after {
+    content: "browse";
+}
+
+.sample-canvas {
+    width: 400px;
+    max-width: 100%;
+}
+
+.donate-button {
+    margin-right: 5px;
+}
+
+.green-button {
+    border-color: #00FF00;
+    color: #00FF00;
+}
+
+.green-button:focus {
+    box-shadow: 0 0 0 0.2rem rgba(0, 255, 0, 0.5);
+}
+
+.pull-sm-right {
+    position: absolute;
+    right: 44px;
+}
+
+@media (min-width: 350px) {
+    .d-xs-block {
+        display: block !important;
+    }
+}
+
+@media (min-width: 768px) {
+    #samples {
+        margin-left: 10%;
+        margin-right: 10%;
+    }
+}
+
+@media (min-width: 992px) {
+    #samples {
+        margin-left: 20%;
+        margin-right: 20%;
+    }
+}
+
+.audio-format {
+    color: #aaaaaa;
+}
+
+.footer-text {
+    color: white;
+    text-align: center;
+}
+
+.footer-text a {
+    color: #00FF00;
+}
+
+.form-card {
+    margin-bottom: 20px;
+}
+
+.login-text {
+    font-family: 'Fira Code', monospace;
+    font-size: 5vmin;
+    color: #00FF00;
+}
+
+.google-sign-in {
+    padding: 9px 9px 9px 3px;
+    text-transform: none;
+    font-family: 'Roboto', sans-serif;
+    border: none;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    color: #757575;
+    background-color: white;
+}
+
+.google-sign-in span {
+    background-color: white;
+    border-radius: 3px;
+    padding: 8px 4px 8px 9px;
+    margin-right: 12px;
+    margin-left: -5px;
+}
+
+.google-sign-in img {
+    margin-bottom: 3px;
+    margin-right: 5px;
+}
+
+.google-sign-in:hover {
+    background-color: #4285F4;
+    border: none;
+}

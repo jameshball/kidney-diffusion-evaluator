@@ -1,0 +1,12 @@
+html, body {
+    height: 100%;
+}
+
+.login {
+    background-color: #282828;
+}
+
+.logo {
+    width: 50vmin;
+}
+
