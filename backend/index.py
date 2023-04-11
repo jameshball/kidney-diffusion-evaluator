@@ -1,10 +1,6 @@
-import functools
-import json
 import os
-import re
 
 from flask import Flask, request, redirect, abort, render_template, url_for, flash
-from flask_migrate import Migrate
 from flask_login import (
     LoginManager,
     current_user,
@@ -12,11 +8,10 @@ from flask_login import (
     login_user,
     logout_user,
 )
-from oauthlib.oauth2 import WebApplicationClient
-import requests
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from backend.member import member
+from backend.classification import classification
 from backend.model import db
 
 class ReverseProxied(object):
@@ -33,6 +28,7 @@ app = Flask(__name__, template_folder="../templates", static_folder="../static")
 app.wsgi_app = ReverseProxied(app.wsgi_app)
 app.secret_key = os.environ.get("SECRET_KEY") or os.urandom(24)
 app.register_blueprint(member)
+app.register_blueprint(classification)
 
 from backend.model import *
 
@@ -52,8 +48,36 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
 db.app = app
 db.init_app(app)
 
-with app.app_context():
-    db.create_all()
+
+def initialise_patches(force=False):
+    with app.app_context():
+        if force:
+            Patch.query.delete()
+            db.session.commit()
+
+        for patch in REAL_PATCHES:
+            # get id from filename without extension
+            patch_id = int(patch.split('.')[0])
+            patch_id = patch_id * 2
+            # check if patch already exists
+            if Patch.query.filter_by(id=patch_id).first():
+                continue
+            # add patch to database
+            new_patch = Patch(id=patch_id, real=True)
+            db.session.add(new_patch)
+        
+        for patch in FAKE_PATCHES:
+            patch_id = int(patch.split('.')[0])
+            patch_id = patch_id * 2 + 1
+            if Patch.query.filter_by(id=patch_id).first():
+                continue
+            new_patch = Patch(id=patch_id, real=False)
+            db.session.add(new_patch)
+        
+        db.session.commit()
+    
+    print('Patches initialised')
+
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -98,19 +122,25 @@ def auth_test():
         return 'Not authenticated!'
 
 
-def add_user(username, password):
+def add_user(username, password, hash=True):
     with app.app_context():
         user = Member.query.filter_by(username=username).first() # if this returns a user, then the email already exists in database
 
         if user:
+            print('User already exists')
             return
 
-        new_user = Member(username=username, password=generate_password_hash(password, method='sha256'))
+        password = generate_password_hash(password, method='sha256') if hash else password
+        new_user = Member(username=username, password=password)
 
         db.session.add(new_user)
         db.session.commit()
 
-add_user('jameshball', 'n6Fj82vEtkC7i$LF4h')
+with app.app_context():
+    db.create_all()
+
+add_user('jameshball', 'sha256$cGLO0lBcmvOdxGIx$a9cc6c4da79f99b41216ffc99a6d4257c2910ca2fc5a0f6f69c05c1fef4725c9', hash=False)
+initialise_patches(force=True)
 
 
 if __name__ == '__main__':

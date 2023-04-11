@@ -1,11 +1,14 @@
 from flask_login import UserMixin
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import func
+import os
 
 db = SQLAlchemy(engine_options={"max_overflow": -1})
 
-# ANY UPDATES TO MODEL NEED TO BE APPLIED TO TEST/PROD DATABASES USING FLASK-MIGRATE/ALEMBIC
-# https://flask-migrate.readthedocs.io/en/latest/
+
+PATCH_DIR = os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir, 'static', 'patches')
+REAL_PATCHES = os.listdir(os.path.join(PATCH_DIR, 'real'))
+FAKE_PATCHES = os.listdir(os.path.join(PATCH_DIR, 'fake'))
 
 
 class Patch(db.Model):
