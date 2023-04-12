@@ -1,51 +1,45 @@
 {% extends "base.html" %}
 {% import 'base.html' as base %}
 {% block back_button %}
-<p>Choose the Whole Slide Image patch that you think is real</p>
+<p class="navbar-brand text-center wsi-choose-text">Choose the Whole Slide Image patch that
+    you think is real
+</p>
 {% endblock %}
 {% block logout_button %}
 {{ base.logout(user.is_authenticated) }}
 {% endblock %}
 {% block content %}
-<div id="samples" class="d-flex flex-column w-100">
-    {% for sample in samples %}
-    <div id="sample-card{{ sample.id }}" class="sample-card card w-100 text-white bg-dark">
-        <div class="card-header">{{ 'anonymous' if sample.anonymous else sample.first_name }} {{ '' if
-            sample.anonymous else sample.last_name }} - {{ sample.name }}
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <img src="/patch?id={{ patch1_id }}" alt="Patch 1" class="img-fluid">
+            <div class="text-center">
+                <form action="/classification" method="POST">
+                    <input type="hidden" name="real_patch_id" value="{{ real_patch_id }}">
+                    <input type="hidden" name="fake_patch_id" value="{{ fake_patch_id }}">
+                    <button type="submit" name="classification"
+                        value="{{ 'real' if real_patch_id == patch1_id else 'fake' }}"
+                        class="btn btn-dark btn-lg black-btn mt-3">This is the real image</button>
+                </form>
+            </div>
         </div>
-        {% if sample.description != '' %}
-        <div class="card-body">
-            <p class="card-text">{{ sample.description }}</p>
-        </div>
-        {% endif %}
-        <div class="card-footer">
-            <span class="audio-format">
-                {% if sample.bit_depth is none %}
-                unknown audio format
-                {% else %}
-                {{ sample.bit_depth }}bit {{ sample.sample_rate }}kHz
-                {% endif %}
-            </span>
-            <div class="sample-buttons">
-                {% if sample.creator == user.id %}
-                <a href="javascript: fetch('/sample/' + '{{ sample.id }}' + '/delete', {method: 'delete'}).then(() => location.reload()); "
-                    class="red-button delete-button">
-                    <span class="material-icons">delete</span>
-                </a>
-                {% endif %}
-                <a href="javascript: playAudio('{{ sample.id }}')" role="button"
-                    class="btn btn-outline-light green-button">
-                    {{ sample.num_downloads }}
-                    <span id="play{{ sample.id }}" class="material-icons play-icon">play_arrow</span>
-                </a>
-                <a href="{{ url_for('sample.download_sample', sample_id=sample.id, play=false) }}" role="button"
-                    class="btn btn-outline-light green-button">
-                    <span class="material-icons download-icon">download</span>
-                </a>
+        <div class="col">
+            <img src="/patch?id={{ patch2_id }}" alt="Patch 2" class="img-fluid">
+            <div class="text-center">
+                <form action="/classification" method="POST">
+                    <input type="hidden" name="real_patch_id" value="{{ real_patch_id }}">
+                    <input type="hidden" name="fake_patch_id" value="{{ fake_patch_id }}">
+                    <button type="submit" name="classification"
+                        value="{{ 'real' if real_patch_id == patch2_id else 'fake' }}"
+                        class="btn btn-dark btn-lg black-btn mt-3">This is the real image</button>
+                </form>
             </div>
         </div>
     </div>
-    {% endfor %}
+</div>
+{% endblock %}
+{% block footer %}
+<div class="d-flex justify-content-center">
     {{ base.footer() }}
 </div>
 {% endblock %}

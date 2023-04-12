@@ -1,4 +1,5 @@
 import os
+import random
 
 from flask import Flask, request, redirect, abort, render_template, url_for, flash
 from flask_login import (
@@ -11,7 +12,7 @@ from flask_login import (
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from backend.member import member
-from backend.classification import classification
+from backend.classification import classification, get_classification
 from backend.model import db
 
 class ReverseProxied(object):
@@ -87,7 +88,21 @@ def load_user(user_id):
 @app.route('/')
 def index():
     if current_user.is_authenticated:
-        return render_template('classification.html', user=current_user)
+        real_patch, fake_patch = get_classification()
+        patch1_id = real_patch.id
+        patch2_id = fake_patch.id
+
+        if random.random() > 0.5:
+            patch1_id, patch2_id = patch2_id, patch1_id
+
+        return render_template(
+            'classification.html',
+            user=current_user,
+            patch1_id=patch1_id,
+            patch2_id=patch2_id,
+            real_patch_id=real_patch.id,
+            fake_patch_id=fake_patch.id,
+        )
     else:
         return render_template('login.html')
 

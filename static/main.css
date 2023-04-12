@@ -1,4 +1,5 @@
-html, body {
+html,
+body {
     height: 100vh;
     background-color: #282828;
     font-family: 'Fira Code', monospace;
@@ -12,12 +13,13 @@ html, body {
     padding-top: 80px;
 }
 
-.navbar-brand {
+.main-logo-text {
     position: absolute;
     color: #00FF00 !important;
 }
 
-.add-icon, .play-icon {
+.add-icon,
+.play-icon {
     float: right;
     margin-left: 10px;
     margin-right: -5px;
@@ -66,7 +68,7 @@ html, body {
     color: #FF0000;
 }
 
-.custom-checkbox .custom-control-input:checked ~ .custom-control-label::before {
+.custom-checkbox .custom-control-input:checked~.custom-control-label::before {
     background-color: #00FF00;
 }
 
@@ -87,7 +89,7 @@ html, body {
     transition: all .15s ease-in-out;
 }
 
-.custom-file-input:lang(en) ~ .custom-file-label::after {
+.custom-file-input:lang(en)~.custom-file-label::after {
     content: "browse";
 }
 
@@ -183,4 +185,21 @@ html, body {
 .google-sign-in:hover {
     background-color: #4285F4;
     border: none;
+}
+
+.wsi-choose-text {
+    margin: 0;
+    white-space: pre-wrap;
+}
+
+/*  white-space: nowrap; for large screens */
+@media (min-width: 816px) {
+    .wsi-choose-text {
+        white-space: nowrap;
+    }
+}
+
+.black-btn {
+    background-color: black;
+    color: white;
 }

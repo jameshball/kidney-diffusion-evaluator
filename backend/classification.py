@@ -10,8 +10,6 @@ from backend.model import db, Classification, Patch, Member, PATCH_DIR
 classification = Blueprint('classification', __name__)
 
 
-@classification.route('/classification', methods=['GET'])
-@login_required
 def get_classification():
     u = current_user
     
@@ -30,15 +28,9 @@ def get_classification():
     )
 
     if not real_patch or not fake_patch:
-        return jsonify(
-            real_patch=None,
-            fake_patch=None,
-        )
+        return None, None
     
-    return jsonify(
-        real_patch=real_patch.id,
-        fake_patch=fake_patch.id,
-    )
+    return real_patch, fake_patch
 
 
 @classification.route('/classification', methods=['POST'])

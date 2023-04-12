@@ -6,14 +6,14 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>osci-sample</title>
-    <meta name="description" content="A platform for sharing oscilloscope music samples.">
+    <title>kidney-diffusion</title>
+    <meta name="description" content="An evaluation platform for synthetic kidney images.">
     <meta name="author" content="James Ball">
 
-    <meta property="og:title" content="osci-sample">
+    <meta property="og:title" content="kidney-diffusion">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://www.osci-sample.com">
-    <meta property="og:description" content="A platform for sharing oscilloscope music samples.">
+    <meta property="og:description" content="An evaluation platform for synthetic kidney images.">
     <meta property="og:image" content="image.png">
 
     <link rel="apple-touch-icon" sizes="180x180" href="../static/apple-touch-icon.png">
@@ -45,7 +45,7 @@
 
 <body>
     <nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark">
-        <a class="navbar-brand d-none d-md-block"
+        <a class="main-logo-text navbar-brand d-none d-md-block"
             href="{{ url_for('index', _scheme='https', _external=True) }}">kidney-diffusion</a>
         <div class="pull-sm-left"></div>
         <div class="ml-0 mr-auto ml-sm-auto">
@@ -54,11 +54,7 @@
         {% block logout_button %}{% endblock %}
     </nav>
     <section class="h-100 samples">
-        <header class="container h-100">
-            <div class="d-flex justify-content-center h-100">
-                {% block content %}{% endblock %}
-            </div>
-        </header>
+        {% block content %}{% endblock %}
     </section>
 </body>
 {% block scripts %}{% endblock %}
