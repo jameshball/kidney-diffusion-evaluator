@@ -13,24 +13,35 @@ classification = Blueprint('classification', __name__)
 def get_classification():
     u = current_user
     
-    # Get a random real patch and a random fake patch that the user hasn't classified
+    # get a real patch and a fake patch that the user hasn't classified with the
+    # smallest id
     real_patch = (
-        Patch.query.filter_by(real=True)
+        db.session.query(Patch)
+        .filter_by(real=True)
         .filter(~Patch.real_classifications.any(Classification.user_id == u.id))
-        .order_by(func.random())
+        .order_by(Patch.id)
         .first()
     )
     fake_patch = (
-        Patch.query.filter_by(real=False)
+        db.session.query(Patch)
+        .filter_by(real=False)
         .filter(~Patch.fake_classifications.any(Classification.user_id == u.id))
-        .order_by(func.random())
+        .order_by(Patch.id)
         .first()
     )
 
+    # get the number of unique classifications the user has made
+    num_classifications = (
+        db.session.query(Classification)
+        .filter_by(user=u)
+        .group_by(Classification.real_patch_id, Classification.fake_patch_id)
+        .count()
+    )
+
     if not real_patch or not fake_patch:
-        return None, None
+        return None, None, num_classifications
     
-    return real_patch, fake_patch
+    return real_patch, fake_patch, num_classifications
 
 
 @classification.route('/classification', methods=['POST'])
@@ -55,6 +66,8 @@ def post_classification():
             success=False,
             message='Invalid patch IDs',
         )
+    
+    print(real_patch_id, fake_patch_id, classification)
 
     new_classification = Classification(
         real_patch=real_patch,

@@ -69,11 +69,3 @@
     </p>
 </div>
 {%- endmacro %}
-
-{% macro logout(authenticated) -%}
-{% if authenticated %}
-<a href="{{ url_for('logout', _scheme='https', _external=True) }}" class="red-button" style="margin-bottom: 8px;">
-    <span style="margin-top: 7px;" class="material-icons add-icon">logout</span>
-</a>
-{% endif %}
-{%- endmacro %}

@@ -9,7 +9,7 @@ from flask_login import (
     login_user,
     logout_user,
 )
-from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.security import check_password_hash
 
 from backend.member import member
 from backend.classification import classification, get_classification
@@ -50,34 +50,9 @@ db.app = app
 db.init_app(app)
 
 
-def initialise_patches(force=False):
-    with app.app_context():
-        if force:
-            Patch.query.delete()
-            db.session.commit()
-
-        for patch in REAL_PATCHES:
-            # get id from filename without extension
-            patch_id = int(patch.split('.')[0])
-            patch_id = patch_id * 2
-            # check if patch already exists
-            if Patch.query.filter_by(id=patch_id).first():
-                continue
-            # add patch to database
-            new_patch = Patch(id=patch_id, real=True)
-            db.session.add(new_patch)
-        
-        for patch in FAKE_PATCHES:
-            patch_id = int(patch.split('.')[0])
-            patch_id = patch_id * 2 + 1
-            if Patch.query.filter_by(id=patch_id).first():
-                continue
-            new_patch = Patch(id=patch_id, real=False)
-            db.session.add(new_patch)
-        
-        db.session.commit()
-    
-    print('Patches initialised')
+@app.context_processor
+def inject_user():
+    return dict(user=current_user)
 
 
 @login_manager.user_loader
@@ -88,7 +63,7 @@ def load_user(user_id):
 @app.route('/')
 def index():
     if current_user.is_authenticated:
-        real_patch, fake_patch = get_classification()
+        real_patch, fake_patch, num_classifications = get_classification()
         patch1_id = real_patch.id
         patch2_id = fake_patch.id
 
@@ -102,6 +77,7 @@ def index():
             patch2_id=patch2_id,
             real_patch_id=real_patch.id,
             fake_patch_id=fake_patch.id,
+            num_classifications=num_classifications,
         )
     else:
         return render_template('login.html')
@@ -135,27 +111,6 @@ def auth_test():
         return 'Authenticated!'
     else:
         return 'Not authenticated!'
-
-
-def add_user(username, password, hash=True):
-    with app.app_context():
-        user = Member.query.filter_by(username=username).first() # if this returns a user, then the email already exists in database
-
-        if user:
-            print('User already exists')
-            return
-
-        password = generate_password_hash(password, method='sha256') if hash else password
-        new_user = Member(username=username, password=password)
-
-        db.session.add(new_user)
-        db.session.commit()
-
-with app.app_context():
-    db.create_all()
-
-add_user('jameshball', 'sha256$cGLO0lBcmvOdxGIx$a9cc6c4da79f99b41216ffc99a6d4257c2910ca2fc5a0f6f69c05c1fef4725c9', hash=False)
-initialise_patches(force=True)
 
 
 if __name__ == '__main__':

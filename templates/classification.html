@@ -6,37 +6,56 @@
 </p>
 {% endblock %}
 {% block logout_button %}
-{{ base.logout(user.is_authenticated) }}
+<a href="{{ url_for('logout', _scheme='https', _external=True) }}" class="red-button"
+    style="margin-bottom: 8px; margin-top: 7px;">
+    {{ user.username }}
+    <span class="material-icons add-icon">logout</span>
+</a>
 {% endblock %}
 {% block content %}
 <div class="container">
     <div class="row">
         <div class="col">
+            <h2 class="text-center mb-3">{{ num_classifications }} patches classified</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
             <img src="/patch?id={{ patch1_id }}" alt="Patch 1" class="img-fluid">
             <div class="text-center">
-                <form action="/classification" method="POST">
-                    <input type="hidden" name="real_patch_id" value="{{ real_patch_id }}">
-                    <input type="hidden" name="fake_patch_id" value="{{ fake_patch_id }}">
-                    <button type="submit" name="classification"
-                        value="{{ 'real' if real_patch_id == patch1_id else 'fake' }}"
-                        class="btn btn-dark btn-lg black-btn mt-3">This is the real image</button>
-                </form>
+                <button type="button" name="classification"
+                    value="{{ 'real' if real_patch_id == patch1_id else 'fake' }}"
+                    class="btn btn-dark btn-lg black-btn mt-3"
+                    onclick="submitClassification('{{ real_patch_id }}', '{{ fake_patch_id }}', `{{ 'real' if real_patch_id == patch1_id else 'fake' }}`)">This
+                    is the real image</button>
             </div>
         </div>
         <div class="col">
             <img src="/patch?id={{ patch2_id }}" alt="Patch 2" class="img-fluid">
             <div class="text-center">
-                <form action="/classification" method="POST">
-                    <input type="hidden" name="real_patch_id" value="{{ real_patch_id }}">
-                    <input type="hidden" name="fake_patch_id" value="{{ fake_patch_id }}">
-                    <button type="submit" name="classification"
-                        value="{{ 'real' if real_patch_id == patch2_id else 'fake' }}"
-                        class="btn btn-dark btn-lg black-btn mt-3">This is the real image</button>
-                </form>
+                <button type="button" name="classification"
+                    value="{{ 'real' if real_patch_id == patch2_id else 'fake' }}"
+                    class="btn btn-dark btn-lg black-btn mt-3"
+                    onclick="submitClassification('{{ real_patch_id }}', '{{ fake_patch_id }}', `{{ 'real' if real_patch_id == patch2_id else 'fake' }}`)">This
+                    is the real image</button>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    function submitClassification(realPatchId, fakePatchId, classification) {
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', '/classification');
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.onload = function () {
+            if (xhr.status === 200) {
+                location.reload();
+            }
+        };
+        xhr.send('real_patch_id=' + realPatchId + '&fake_patch_id=' + fakePatchId + '&classification=' + classification);
+    }
+</script>
 {% endblock %}
 {% block footer %}
 <div class="d-flex justify-content-center">

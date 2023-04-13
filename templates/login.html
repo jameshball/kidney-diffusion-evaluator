@@ -1,11 +1,12 @@
 {% extends "base.html" %}
 {% import 'base.html' as base %}
 {% block back_button %}
-<a href="{{ url_for('index', _scheme='https', _external=True) }}" role="button" class="btn btn-outline-light">view
-    samples</a>
+<p class="navbar-brand text-center wsi-choose-text">Choose the Whole Slide Image patch that
+    you think is real
+</p>
 {% endblock %}
 {% block content %}
-<div class="column is-4 is-offset-4">
+<div class="column is-4 is-offset-4 text-center">
     <h3 class="title">Login</h3>
     <div class="box">
         {% with messages = get_flashed_messages() %}
