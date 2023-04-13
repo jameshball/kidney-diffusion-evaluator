@@ -26,7 +26,7 @@
                 <button type="button" name="classification"
                     value="{{ 'real' if real_patch_id == patch1_id else 'fake' }}"
                     class="btn btn-dark btn-lg black-btn mt-3"
-                    onclick="submitClassification('{{ real_patch_id }}', '{{ fake_patch_id }}', `{{ 'real' if real_patch_id == patch1_id else 'fake' }}`)">This
+                    onclick="submitClassification('{{ real_patch_id }}', '{{ fake_patch_id }}', `{{ 'real' if real_patch_id == patch1_id else 'fake' }}`)">this
                     is the real image</button>
             </div>
         </div>
@@ -36,9 +36,14 @@
                 <button type="button" name="classification"
                     value="{{ 'real' if real_patch_id == patch2_id else 'fake' }}"
                     class="btn btn-dark btn-lg black-btn mt-3"
-                    onclick="submitClassification('{{ real_patch_id }}', '{{ fake_patch_id }}', `{{ 'real' if real_patch_id == patch2_id else 'fake' }}`)">This
+                    onclick="submitClassification('{{ real_patch_id }}', '{{ fake_patch_id }}', `{{ 'real' if real_patch_id == patch2_id else 'fake' }}`)">this
                     is the real image</button>
             </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            {{ base.footer() }}
         </div>
     </div>
 </div>
@@ -56,9 +61,4 @@
         xhr.send('real_patch_id=' + realPatchId + '&fake_patch_id=' + fakePatchId + '&classification=' + classification);
     }
 </script>
-{% endblock %}
-{% block footer %}
-<div class="d-flex justify-content-center">
-    {{ base.footer() }}
-</div>
 {% endblock %}
