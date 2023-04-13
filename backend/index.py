@@ -16,14 +16,14 @@ from backend.classification import classification, get_classification
 from backend.model import db
 
 app = Flask(__name__, template_folder="../templates", static_folder="../static")
-app.secret_key = os.environ.get("SECRET_KEY") or os.urandom(24)
+app.secret_key = '401dd05815924be5a9bc159e6198a4c9'
 app.register_blueprint(member)
 app.register_blueprint(classification)
 
 from backend.model import *
 
 login_manager = LoginManager()
-login_manager.login_view = 'login'
+login_manager.login_view = 'index'
 login_manager.init_app(app)
 login_manager.session_protection = None
 
