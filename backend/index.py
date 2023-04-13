@@ -15,18 +15,7 @@ from backend.member import member
 from backend.classification import classification, get_classification
 from backend.model import db
 
-class ReverseProxied(object):
-    def __init__(self, app):
-        self.app = app
-
-    def __call__(self, environ, start_response):
-        scheme = environ.get('HTTP_X_FORWARDED_PROTO')
-        if scheme:
-            environ['wsgi.url_scheme'] = scheme
-        return self.app(environ, start_response)
-
 app = Flask(__name__, template_folder="../templates", static_folder="../static")
-app.wsgi_app = ReverseProxied(app.wsgi_app)
 app.secret_key = os.environ.get("SECRET_KEY") or os.urandom(24)
 app.register_blueprint(member)
 app.register_blueprint(classification)
@@ -92,17 +81,17 @@ def login_post():
 
     if not user or not check_password_hash(user.password, password):
         flash('Please check your login details and try again.')
-        return redirect(url_for('index', _scheme='https', _external=True))
+        return redirect(url_for('index'))
 
     login_user(user, remember=True)
-    return redirect(url_for('index', _scheme='https', _external=True))
+    return redirect(url_for('index'))
 
 
 @app.route("/logout")
 @login_required
 def logout():
     logout_user()
-    return redirect(url_for('index', _scheme='https', _external=True))
+    return redirect(url_for('index'))
 
 
 @app.route("/auth-test")
@@ -114,4 +103,4 @@ def auth_test():
 
 
 if __name__ == '__main__':
-    app.run(ssl_context='adhoc')
+    app.run()

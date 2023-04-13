@@ -6,8 +6,7 @@
 </p>
 {% endblock %}
 {% block logout_button %}
-<a href="{{ url_for('logout', _scheme='https', _external=True) }}" class="red-button"
-    style="margin-bottom: 8px; margin-top: 7px;">
+<a href="{{ url_for('logout') }}" class="red-button" style="margin-bottom: 8px; margin-top: 7px;">
     {{ user.username }}
     <span class="material-icons add-icon">logout</span>
 </a>
