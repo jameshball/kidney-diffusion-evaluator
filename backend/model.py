@@ -14,6 +14,7 @@ FAKE_PATCHES = os.listdir(os.path.join(PATCH_DIR, 'fake'))
 class Patch(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     real = db.Column(db.Boolean) # True if real, False if fake
+    version = db.Column(db.Integer)
 
 
 class Classification(db.Model):

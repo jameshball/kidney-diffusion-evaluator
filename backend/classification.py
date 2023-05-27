@@ -4,6 +4,7 @@ import os
 from flask import Blueprint, request, jsonify, send_file
 from flask_login import current_user, login_required
 from sqlalchemy.sql.expression import func
+from sqlalchemy import nullslast
 
 from backend.model import db, Classification, Patch, Member, PATCH_DIR
 
@@ -19,14 +20,15 @@ def get_classification():
         db.session.query(Patch)
         .filter_by(real=True)
         .filter(~Patch.real_classifications.any(Classification.user_id == u.id))
-        .order_by(Patch.id)
+        # order by id to get smallest id, and then by version to get the latest version
+        .order_by(nullslast(Patch.version.desc()), Patch.id)
         .first()
     )
     fake_patch = (
         db.session.query(Patch)
         .filter_by(real=False)
         .filter(~Patch.fake_classifications.any(Classification.user_id == u.id))
-        .order_by(Patch.id)
+        .order_by(nullslast(Patch.version.desc()), Patch.id)
         .first()
     )
 
@@ -105,9 +107,15 @@ def get_patch():
     if patch.real:
         patch_id = patch_id // 2
         path = os.path.join(PATCH_DIR, 'real', f'{patch_id}.png')
+        path_version = os.path.join(PATCH_DIR, 'real', f'{patch_id}_{patch.version}.png')
+        if os.path.exists(path_version):
+            path = path_version
     else:
         patch_id = (patch_id - 1) // 2
         path = os.path.join(PATCH_DIR, 'fake', f'{patch_id}.png')
+        path_version = os.path.join(PATCH_DIR, 'fake', f'{patch_id}_{patch.version}.png')
+        if os.path.exists(path_version):
+            path = path_version
     
     return send_file(path)
 

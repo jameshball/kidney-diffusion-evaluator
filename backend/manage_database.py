@@ -40,6 +40,19 @@ def add_user(username, password, hash=True):
         db.session.commit()
 
 
+def get_id_version(filename):
+    filename = filename.split('.')[0]
+    id_version = filename.split('_')
+    if len(id_version) == 2:
+        patch_id = int(id_version[0])
+        version = int(id_version[1])
+    else:
+        patch_id = int(id_version[0])
+        version = 0
+    
+    return patch_id, version
+
+
 def initialise_patches(force=False):
     with app.app_context():
         if force:
@@ -48,21 +61,23 @@ def initialise_patches(force=False):
 
         for patch in REAL_PATCHES:
             # get id from filename without extension
-            patch_id = int(patch.split('.')[0])
+            patch_id, version = get_id_version(patch)
             patch_id = patch_id * 2
             # check if patch already exists
             if Patch.query.filter_by(id=patch_id).first():
                 continue
             # add patch to database
-            new_patch = Patch(id=patch_id, real=True)
+            new_patch = Patch(id=patch_id, real=True, version=version)
+            print(new_patch)
             db.session.add(new_patch)
         
         for patch in FAKE_PATCHES:
-            patch_id = int(patch.split('.')[0])
+            patch_id, version = get_id_version(patch)
             patch_id = patch_id * 2 + 1
             if Patch.query.filter_by(id=patch_id).first():
                 continue
-            new_patch = Patch(id=patch_id, real=False)
+            new_patch = Patch(id=patch_id, real=False, version=version)
+            print(new_patch)
             db.session.add(new_patch)
         
         db.session.commit()
@@ -77,7 +92,7 @@ def list_classifications(username):
 
         classifications = Classification.query.filter_by(user=user).all()
         for classification in classifications:
-            print(classification.classification, classification.timestamp)
+            print(classification.classification, classification.timestamp, "real patch id:", classification.real_patch_id, "fake patch id:", classification.fake_patch_id, "fake patch version:", classification.fake_patch.version)
 
 
 def clear_classifications(username):

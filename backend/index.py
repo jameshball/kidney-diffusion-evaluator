@@ -31,9 +31,11 @@ login_manager.session_protection = None
 def load_user(user_id):
     return Member.query.get(int(user_id))
 
+basedir = os.path.abspath(os.path.dirname(__file__))
+
 app.config['MAX_CONTENT_LENGTH'] = 21 * 1024 * 1024
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, os.pardir, 'instance', 'db.sqlite')
 
 db.app = app
 db.init_app(app)
