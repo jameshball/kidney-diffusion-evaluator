@@ -77,7 +77,7 @@ def list_classifications(username):
 
         classifications = Classification.query.filter_by(user=user).all()
         for classification in classifications:
-            print(classification.classification)
+            print(classification.classification, classification.timestamp)
 
 
 def clear_classifications(username):

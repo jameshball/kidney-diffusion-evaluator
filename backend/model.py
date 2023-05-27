@@ -25,6 +25,8 @@ class Classification(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('member.id'))
     user = db.relationship('Member', backref=db.backref('classifications', lazy=True))
     timestamp = db.Column(db.DateTime(timezone=True), server_default=func.now())
+    # This is the classification of the REAL image. So if it's true, then they
+    # correctly classified the real image, and vice versa if false.
     classification = db.Column(db.Boolean) # True if real, False if fake
 
 
