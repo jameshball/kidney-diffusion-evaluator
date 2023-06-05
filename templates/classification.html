@@ -20,7 +20,7 @@
     </div>
     <div class="row">
         <div class="col">
-            <img src="/patch?id={{ patch1_id }}" alt="Patch 1" class="img-fluid">
+            <img src="/patch?id={{ patch1_id }}" width="1024" height="1024" alt="Patch 1" class="img-fluid">
             <div class="text-center">
                 <button type="button" name="classification"
                     value="{{ 'real' if real_patch_id == patch1_id else 'fake' }}"
@@ -30,7 +30,7 @@
             </div>
         </div>
         <div class="col">
-            <img src="/patch?id={{ patch2_id }}" alt="Patch 2" class="img-fluid">
+            <img src="/patch?id={{ patch2_id }}" width="1024" height="1024" alt="Patch 2" class="img-fluid">
             <div class="text-center">
                 <button type="button" name="classification"
                     value="{{ 'real' if real_patch_id == patch2_id else 'fake' }}"
