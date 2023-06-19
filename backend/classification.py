@@ -20,6 +20,7 @@ def get_classification():
         db.session.query(Patch)
         .filter_by(real=True)
         .filter(~Patch.real_classifications.any(Classification.user_id == u.id))
+        .filter_by(version=1)
         # order by id to get smallest id, and then by version to get the latest version
         .order_by(nullslast(Patch.version.desc()), Patch.id)
         .first()
@@ -28,6 +29,7 @@ def get_classification():
         db.session.query(Patch)
         .filter_by(real=False)
         .filter(~Patch.fake_classifications.any(Classification.user_id == u.id))
+        .filter_by(version=1)
         .order_by(nullslast(Patch.version.desc()), Patch.id)
         .first()
     )
